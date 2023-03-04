@@ -1,18 +1,24 @@
 const express = require("express");
 const router = express();
+const key = require("random-key");
 
-const adminRouter = require("./adminRouter");
-const kategoriRouter = require("./kategoriRouter");
-const produkRouter = require('./produkRouter');
-const pembeliRouter = require('./pembeliRouter');
+const { register, login } = require("../controllers/authController");
+const userRouter = require("./userRouter");
+const outletRouter = require("./outletsRouter");
 
+// homepage
 router.get("/", (req, res) => {
-  res.send("Hello to Express");
+  res.send("Welcome, Point Of Sales!");
 });
+// router.get('/key', (req, res) => {
+//   res.send(key.generate(32));
+// });
 
-router.use("/admin", adminRouter);
-router.use("/kategori", kategoriRouter);
-router.use("/produk", produkRouter);
-router.use("/pembeli", pembeliRouter);
+// auth
+router.post("/register", register);
+router.post("/login", login);
+
+router.use("/user", userRouter);
+router.use("/outlet", outletRouter);
 
 module.exports = router;
