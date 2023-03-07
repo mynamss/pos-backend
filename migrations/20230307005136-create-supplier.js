@@ -2,46 +2,64 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("admins", {
-      // dari db pakai alter, id_user sudah diubah ke id
-      id_user: {
+    await queryInterface.createTable("suppliers", {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      produk_id: {
+      addresss_id: {
+        allowNull: false,
         type: Sequelize.INTEGER,
+        references: {
+          model: "suppliers_address",
+          key: "id",
+        },
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
-      shift_id: {
-        type: Sequelize.INTEGER,
+      company_code: {
+        type: Sequelize.STRING,
       },
-      nama: {
+      company_name: {
+        type: Sequelize.STRING,
+      },
+      phone: {
         type: Sequelize.STRING,
       },
       email: {
         type: Sequelize.STRING,
       },
-      no_telp: {
+      faxmail: {
         type: Sequelize.STRING,
       },
-      password: {
+      company_logo: {
         type: Sequelize.STRING,
       },
-      alamat: {
+      motto: {
+        type: Sequelize.STRING,
+      },
+      desc: {
         type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      created_by: {
+        type: Sequelize.INTEGER,
+      },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      updated_by: {
+        type: Sequelize.INTEGER,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("admins");
+    await queryInterface.dropTable("suppliers");
   },
 };
