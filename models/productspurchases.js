@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
-      productsPurchase.belongsToMany(Product, {
-        through: detailsProduct,
+      productsPurchase.belongsToMany(models.Product, {
+        through: "detailsProduct",
         foreignKey: "purchase_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "products_purchases",
+      modelName: "productsPurchase",
       underscored: true,
     }
   );

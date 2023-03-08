@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "suppliers_address",
+      modelName: "suppliersAddress",
       underscored: true,
     }
   );

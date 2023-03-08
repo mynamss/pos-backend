@@ -1,5 +1,5 @@
 const models = require("../models");
-const { customers, employees } = models;
+const { Customer, Employee } = models;
 require("dotenv").config();
 
 const { generateToken } = require("../middlewares");
@@ -23,12 +23,7 @@ module.exports = {
   registerEmployee: async (req, res) => {
     try {
       let {
-        outlet_id,
-        role_id,
-        address_id,
-        shift_id,
-        status_id,
-        employee_code,
+        status,
         employee_name,
         first_name,
         last_name,
@@ -44,21 +39,22 @@ module.exports = {
         entry_date,
         out_date,
         photo,
-        created_by,
       } = req.body;
       //   data checking
-      let isEmailExist = await employees.findOne({ where: { email: email } });
+      let isEmailExist = await Employee.findOne({
+        where: {
+          email: email
+        }
+      });
 
       if (isEmailExist == null) {
         const salt = await bcrypt.genSalt(saltRounds);
         const hashPassword = await bcrypt.hash(password, salt);
 
-        await employees.create({
-          outlet_id: outlet_id,
-          role_id: role_id,
-          address_id: address_id,
-          shift_id: shift_id,
-          status_id: status_id,
+        
+
+        await Employee.create({
+          status: status,
           employee_code: employee_code,
           employee_name: employee_name,
           first_name: first_name,
@@ -69,7 +65,7 @@ module.exports = {
           married_status: married_status,
           phone: phone,
           email: email,
-          password: password,
+          password: hashPassword,
           main_salary: main_salary,
           bonus_salary: bonus_salary,
           entry_date: entry_date,

@@ -8,14 +8,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
       Customer.belongsTo(models.Point, {
         foreignKey: "point_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
       Customer.belongsToMany(models.Outlet, {
-        through: customersOutlet,
+        through: "customersOutlet",
         foreignKey: "cust_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
@@ -39,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "customers",
+      modelName: "Customer",
       underscored: true,
     }
   );

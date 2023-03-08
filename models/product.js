@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     /**
@@ -14,48 +12,49 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "category_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
-      })
+      });
       Product.belongsToMany(models.productsPurchase, {
-        through: detailsProduct,
+        through: "detailsProduct",
         foreignKey: "product_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
-        
-      })
+      });
       Product.belongsToMany(models.Outlet, {
-        through: productsOutlet,
+        through: "productsOutlet",
         foreignKey: "product_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
-        
-      })
+      });
       Product.belongsToMany(models.Sales, {
-        through: detailsItem,
+        through: "detailsItem",
         foreignKey: "product_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
-      })
+      });
     }
   }
-  Product.init({
-    category_id: DataTypes.INTEGER,
-    product_code: DataTypes.STRING,
-    product_name: DataTypes.STRING,
-    barcode_id: DataTypes.STRING,
-    weigth: DataTypes.FLOAT,
-    stock: DataTypes.INTEGER,
-    unit_price: DataTypes.FLOAT,
-    sell_price: DataTypes.FLOAT,
-    desc: DataTypes.STRING,
-    image: DataTypes.STRING,
-    exp_date: DataTypes.DATEONLY,
-    BPOM_number: DataTypes.STRING,
-    created_by: DataTypes.INTEGER,
-    updated_by: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'products',
-    underscored: true
-  });
+  Product.init(
+    {
+      category_id: DataTypes.INTEGER,
+      product_code: DataTypes.STRING,
+      product_name: DataTypes.STRING,
+      barcode_id: DataTypes.STRING,
+      weigth: DataTypes.FLOAT,
+      stock: DataTypes.INTEGER,
+      unit_price: DataTypes.FLOAT,
+      sell_price: DataTypes.FLOAT,
+      desc: DataTypes.STRING,
+      image: DataTypes.STRING,
+      exp_date: DataTypes.DATEONLY,
+      BPOM_number: DataTypes.STRING,
+      created_by: DataTypes.INTEGER,
+      updated_by: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: "Product",
+      underscored: true,
+    }
+  );
   return Product;
 };

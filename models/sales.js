@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       })
 
       Sales.belongsToMany(models.Product, {
-        through: detailsItem,
+        through: "detailsItem",
         foreignKey: "sale_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     updated_by: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'sales',
+    modelName: 'Sales',
     underscored: true
   });
   return Sales;

@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "shifts",
+      modelName: "Shift",
       underscored: true,
     }
   );

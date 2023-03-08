@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     updated_by: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'leave',
+    modelName: 'Leave',
     underscored: true
   });
   return Leave;

@@ -1,5 +1,6 @@
 "use strict";
 const { Model, TimeoutError } = require("sequelize");
+const { Product } = require("./product");
 module.exports = (sequelize, DataTypes) => {
   class Categories extends Model {
     /**
@@ -20,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "categories",
+      modelName: "Categories",
       underscored: true,
     }
   );

@@ -15,19 +15,19 @@ module.exports = (sequelize, DataTypes) => {
       Outlet.hasMany(models.Employee);
       // M to M
       Outlet.belongsToMany(models.Product, {
-        through: productsOutlet,
+        through: "productsOutlet",
         foreignKey: "outlet_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
       Outlet.belongsToMany(models.Supplier, {
-        through: suppliersOutlet,
+        through: "suppliersOutlet",
         foreignKey: "outlet_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
       Outlet.belongsToMany(models.Customer, {
-        through: customersOutlet,
+        through: "customersOutlet",
         foreignKey: "outlet_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "outlets",
+      modelName: "Outlet",
       underscored: true,
     }
   );
