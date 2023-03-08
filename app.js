@@ -5,7 +5,8 @@ const PORT = process.env.PORT || 3000;
 
 // middleware
 app.use(express.json());
-app.use(allRoutes)
+app.use(allRoutes);
+
 
 
 app.listen(PORT, () => {

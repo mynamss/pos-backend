@@ -1,12 +1,25 @@
 const express = require("express");
 const router = express();
+const key = require("random-key");
 
-const userRouter = require("./userRouter");
+const customersRouter = require("./customersRouter");
+const employeesRouter = require("./employeesRouter");
+const outletRouter = require("./outletsRouter");
 
+// homepage
 router.get("/", (req, res) => {
-  res.send("Hello to Express");
+  // res.set("Content-Type", "application/json");
+  res.send("Welcome, Point Of Sales!");
 });
+// router.get('/key', (req, res) => {
+//   res.send(key.generate(32));
+// });
 
-router.get("/user", userRouter);
+// user
+router.use("/member", customersRouter);
+router.use("/employee", employeesRouter);
+
+// menu
+router.use("/outlet", outletRouter);
 
 module.exports = router;
