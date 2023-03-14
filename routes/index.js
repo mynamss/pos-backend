@@ -7,6 +7,9 @@ const employeesRouter = require("./employeesRouter");
 const outletRouter = require("./outletsRouter");
 const rolesRouter = require("./rolesRouter");
 const shiftsRouter = require("./shiftsRouter.js");
+const leaveRouter = require('./leaveRouter');
+const categoriesRouter = require('./categoriesRouter');
+const pointsRouter = require('./pointsRouter');
 
 // homepage
 router.get("/", (req, res) => {
@@ -25,6 +28,9 @@ router.use("/employees", employeesRouter);
 router.use("/outlets", outletRouter);
 router.use("/roles", rolesRouter);
 router.use("/shifts", shiftsRouter);
+router.use("/leave", leaveRouter);
+router.use("/categories", categoriesRouter)
+router.use("/points", pointsRouter)
 
 
 module.exports = router;

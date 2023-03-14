@@ -1,5 +1,6 @@
 const models = require("../../models");
-const { points } = models;
+const { Points } = models;
+const response = require("../../response");
 
 module.exports = {
   getAllPoints: async (req, res) => {
