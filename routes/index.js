@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express();
-const key = require("random-key");
+// const key = require("random-key");
 
 const customersRouter = require("./customersRouter");
 const employeesRouter = require("./employeesRouter");
 const outletRouter = require("./outletsRouter");
+const rolesRouter = require("./rolesRouter");
+const shiftsRouter = require("./shiftsRouter.js");
 
 // homepage
 router.get("/", (req, res) => {
@@ -17,9 +19,12 @@ router.get("/", (req, res) => {
 
 // user
 router.use("/member", customersRouter);
-router.use("/employee", employeesRouter);
+router.use("/employees", employeesRouter);
 
 // menu
-router.use("/outlet", outletRouter);
+router.use("/outlets", outletRouter);
+router.use("/roles", rolesRouter);
+router.use("/shifts", shiftsRouter);
+
 
 module.exports = router;

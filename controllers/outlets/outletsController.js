@@ -1,5 +1,5 @@
 const models = require("../../models");
-const { outlets, o_address } = models;
+const { Outlet } = models;
 
 module.exports = {
   // Table Outlets
@@ -14,7 +14,6 @@ module.exports = {
   addOutlet: async (req, res) => {
     try {
       const {
-        address_id,
         company_name,
         outlet_name,
         outlet_code,
@@ -23,11 +22,16 @@ module.exports = {
         phone,
         faxmail,
         owner_name,
-        created_by, 
+        created_by,
+        street_name,
+        district,
+        city,
+        province,
+        country,
+        postal_code,
       } = req.body;
 
       let newOutlet = {
-        address_id: address_id,
         company_name: company_name,
         outlet_name: outlet_name,
         outlet_code: outlet_code,
@@ -39,7 +43,7 @@ module.exports = {
         created_by: created_by
       };
       // check datas in db
-      const isOutletExist = await outlets.findOne({
+      const isOutletExist = await Outlet.findOne({
         where: {
           email: newOutlet.email
         }
@@ -47,17 +51,16 @@ module.exports = {
 
       if (isOutletExist == null) {
         // insert to db
-        await outlets.create({
-          address_id: address_id,
-          company_name: company_name,
-          outlet_name: outlet_name,
-          outlet_code: outlet_code,
-          slogan: slogan,
-          email: email,
-          phone: phone,
-          faxmail: faxmail,
-          owner_name: owner_name,
-          created_by:created_by
+        await Outlet.create({
+          company_name: newOutlet.company_name,
+          outlet_name: newOutlet.outlet_name,
+          outlet_code: newOutlet.outlet_code,
+          slogan: newOutlet.slogan,
+          email: newOutlet.email,
+          phone: newOutlet.phone,
+          faxmail: newOutlet.faxmail,
+          owner_name: newOutlet.owner_name,
+          created_by:newOutlet.created_by
         })
 
         res.status(201).json({

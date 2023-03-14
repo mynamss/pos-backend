@@ -14,7 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
-      Employee.hasOne(models.Role);
+      Employee.belongsTo(models.Role, {
+        foreignKey: "role_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      });
       Employee.hasOne(models.employeesAddress);
       Employee.hasOne(models.Shift);
       Employee.hasOne(models.productsPurchase);
@@ -31,10 +35,11 @@ module.exports = (sequelize, DataTypes) => {
       employee_name: DataTypes.STRING,
       first_name: DataTypes.STRING,
       last_name: DataTypes.STRING,
-      ID_card: DataTypes.STRING,
+      id_card: DataTypes.STRING,
       gender: DataTypes.STRING,
       birthdate: DataTypes.DATE,
       married_status: DataTypes.BOOLEAN,
+      // Married status udah diubah manual ke string
       phone: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,

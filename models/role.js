@@ -9,16 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Role.belongsTo(models.Employee, {
-        foreignKey: "employee_id",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      });
+      Role.hasMany(models.Employee);
     }
   }
   Role.init(
     {
-      employee_id: DataTypes.INTEGER,
       role_code: DataTypes.STRING,
       role_name: DataTypes.STRING,
       created_by: DataTypes.INTEGER,

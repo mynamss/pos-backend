@@ -9,16 +9,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      employee_id: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: "employees",
-          key: "id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      },
       role_code: {
         type: Sequelize.STRING,
       },
