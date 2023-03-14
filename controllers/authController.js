@@ -143,7 +143,7 @@ module.exports = {
               },
             }
           );
-          response(200, isUserExist, "Login Success!", res);
+          response(200, createToken, "Login Success!", res);
         } else {
           response(403, null, "Wrong Password!", res);
         }
