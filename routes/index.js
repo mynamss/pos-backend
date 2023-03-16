@@ -10,6 +10,7 @@ const shiftsRouter = require("./shiftsRouter.js");
 const leaveRouter = require('./leaveRouter');
 const categoriesRouter = require('./categoriesRouter');
 const pointsRouter = require('./pointsRouter');
+const productsRouter = require('./productsRouter');
 
 // homepage
 router.get("/", (req, res) => {
@@ -31,6 +32,8 @@ router.use("/shifts", shiftsRouter);
 router.use("/leave", leaveRouter);
 router.use("/categories", categoriesRouter)
 router.use("/points", pointsRouter)
+router.use("/customers", customersRouter)
+router.use("/products", productsRouter)
 
 
 module.exports = router;

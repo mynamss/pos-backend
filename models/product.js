@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       desc: DataTypes.STRING,
       image: DataTypes.STRING,
       exp_date: DataTypes.DATEONLY,
-      BPOM_number: DataTypes.STRING,
+      bpom_number: DataTypes.STRING,
       created_by: DataTypes.INTEGER,
       updated_by: DataTypes.INTEGER,
     },

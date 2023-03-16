@@ -13,8 +13,8 @@ router.post("/register", registerCust);
 router.post("/login", loginCust);
 
 // Customers
-router.get("/all", [verifyToken],getAllCustomer);
-router.get("/:id", getCustomerByID);
+router.get("/",getAllCustomer);
+router.get("/search", getCustomerByID);
 router.post("/:id", addCustomer);
 router.put("/:id", updateCustomer);
 router.delete("/:id", deleteCustomer);

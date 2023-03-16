@@ -18,16 +18,18 @@ module.exports = {
   },
   getCategoryByID: async (req, res) => {
     try {
-      let { ctgcode } = req.params;
+      let { ctgcode } = req.query;
+      
       const oneCategory = await Categories.findOne({
         where: {
           category_code: ctgcode,
         },
       });
-      if (oneCategory) {
+      if (oneCategory.length == 0) {
+        response(404, null, "Category not found", res);
+      } else {
         response(200, oneCategory, "Get 1 Categories Success", res);
       }
-      response(404, null, "Category not found", res);
     } catch (error) {
       response(500, error, "Internal server error", res);
     }
@@ -43,8 +45,8 @@ module.exports = {
       });
       // Check and insert to DB
       if (isCategoryExist == null) {
-        await Categories.create(newCategory);
-        response(201, newCategory, "Added Categories Success", res);
+        let result = await Categories.create(newCategory);
+        response(201, result, "Added Categories Success", res);
       } else {
         response(403, isCategoryExist, "Category is exist", res);
       }
@@ -107,7 +109,7 @@ module.exports = {
         response(200, "", "Category Deleted", res);
       }
     } catch (error) {
-      response(500, ``, "Internal server error", res);
+      response(500, error, "Internal server error", res);
     }
   },
 };

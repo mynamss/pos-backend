@@ -1,5 +1,5 @@
 const models = require("../models");
-const { Employee, employeesAddress } = models;
+const { Employee, employeesAddress, Customer, Point } = models;
 require("dotenv").config();
 
 const bcrypt = require("bcrypt");
@@ -11,13 +11,100 @@ module.exports = {
   // Customers
   registerCust: async (req, res) => {
     try {
-      let {} = req.body;
+      // Gender pakai string lowercase
+      let cust = req.body;
 
-      res.send("register sukses");
-    } catch (error) {}
+      let isCustExist = await Customer.findOne({
+        where: {
+          email: cust.email,
+        },
+      });
+      // checking and insert to DB
+      if (isCustExist == null) {
+        // Hash pwd -> Hash PIN -> create to DB -> create point
+        const salt = await bcrypt.genSalt(saltRounds);
+        const hashedPwd = await bcrypt.hash(cust.password, salt);
+        // const hashedPIN = await bcrypt.hash(cust.pin_number, salt);
+
+        // Insert to DB Customer
+        let newCust = await Customer.create({
+          cust_code: cust.cust_code,
+          member_name: cust.member_name,
+          first_name: cust.first_name,
+          last_name: cust.last_name,
+          gender: cust.gender,
+          phone: cust.phone,
+          email: cust.email,
+          password: hashedPwd,
+          pin_number: cust.pin_number,
+        });
+        // Insert to DB Point
+        await Point.create({
+          customer_id: newCust.id,
+          total_point: 1000,
+          level_name: "Bronze",
+          created_by: newCust.id,
+          updated_by: newCust.id,
+        });
+        // Update
+        await Customer.update(
+          {
+            created_by: newCust.id,
+            updated_by: newCust.id,
+          },
+          {
+            where: {
+              email: newCust.email,
+            },
+          }
+        );
+        response(201, newCust, "Register Success", res);
+      } else {
+        response(403, null, "Email has been register!", res);
+      }
+    } catch (error) {
+      response(500, error, "Internal Server Error", res);
+    }
   },
   loginCust: async (req, res) => {
-    res.send("login sukses");
+    try {
+      let inputData = req.body;
+      let checkCust = await Customer.findOne({
+        where: {
+          email: inputData.email,
+        },
+      });
+      // checking
+      if (checkCust == null) {
+        response(404, null, "User Not Found", res);
+      } else {
+        let compare = await bcrypt.compare(inputData.password, checkCust.password);
+        if (compare) {
+          // Buat token dan update ke db
+          const tokenCust = {
+            pin_number: checkCust.pin_number,
+            as: "Member",
+          };
+          const newToken = generateToken(tokenCust);
+          await Customer.update(
+            {
+              token: newToken,
+            },
+            {
+              where: {
+                email: checkCust.email,
+              },
+            }
+          );
+          // console.log("Isi: ", checkCust);
+          response(200, newToken, "Login Success", res);
+        } else {
+          response(403, null, "Wrong Password!", res);
+        }
+      }
+    } catch (error) {
+      response(500, error, "Internal Server Error", res);
+    }
   },
 
   // Employees
