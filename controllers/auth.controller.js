@@ -1,11 +1,11 @@
 const models = require("../models");
-const { Employee, employeesAddress, Customer, Point } = models;
+const { Employee, employeesAddress, Customer, Point, Outlet } = models;
 require("dotenv").config();
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { generateToken } = require("../middlewares");
-const response = require("../response");
+const { response } = require("../response");
 
 module.exports = {
   // Customers
@@ -97,7 +97,7 @@ module.exports = {
             }
           );
           // console.log("Isi: ", checkCust);
-          response(200, newToken, "Login Success", res);
+          response(200, { newToken, tokenCust }, "Login Success", res);
         } else {
           response(403, null, "Wrong Password!", res);
         }
@@ -111,78 +111,58 @@ module.exports = {
   registerEmployee: async (req, res) => {
     try {
       // Info, belum ngambil data dari model outlet dan role
-      let {
-        outletId,
-        roleId,
-        status,
-        employeeCode,
-        employeeName,
-        firstName,
-        lastName,
-        IDCard,
-        gender,
-        birthdate,
-        marriedStatus,
-        phone,
-        email,
-        password,
-        mainSalary,
-        bonusSalary,
-        entryDate,
-        outDate,
-        photo,
-        streetName,
-        district,
-        city,
-        province,
-        country,
-        postalCode,
-      } = req.body;
+      // PERBAIKI VALIDASI SETIAP DATA
+      const newEmp = req.body;
       //   data checking
       let isEmailExist = await Employee.findOne({
         where: {
-          email: email,
+          email: newEmp.email,
         },
       });
-      // isNull ?
+      // checking
       if (isEmailExist == null) {
+        // const outlet = await Outlet.findOne({
+        //   where: {
+        //     outlet_code: newEmp.outletCode,
+        //   },
+        // });
         const salt = await bcrypt.genSalt(saltRounds);
-        const hashPwd = await bcrypt.hash(password, salt);
+        const hashPwd = await bcrypt.hash(newEmp.password, salt);
         // insert to DB employees
         let dataEmployee = await Employee.create({
-          outlet_id: outletId,
-          role_id: roleId,
-          status: status,
-          employee_code: employeeCode,
-          employee_name: employeeName,
-          first_name: firstName,
-          last_name: lastName,
-          id_card: IDCard,
-          gender: gender,
-          birthdate: birthdate,
-          married_status: marriedStatus,
-          phone: phone,
-          email: email,
+          outlet_id: newEmp.outletID,
+          role_id: newEmp.roleID,
+          status: newEmp.status,
+          employee_code: newEmp.employeeCode,
+          employee_name: newEmp.employeeName,
+          first_name: newEmp.firstName,
+          last_name: newEmp.lastName,
+          id_card: newEmp.IDCard,
+          gender: newEmp.gender,
+          birthdate: new Date(newEmp.birthdate),
+          married_status: newEmp.marriedStatus,
+          phone: newEmp.phone,
+          email: newEmp.email,
           password: hashPwd,
-          main_salary: mainSalary,
-          bonus_salary: bonusSalary,
-          entry_date: entryDate,
-          out_date: outDate,
-          photo: photo,
+          main_salary: newEmp.mainSalary,
+          bonus_salary: newEmp.bonusSalary,
+          entry_date: newEmp.entryDate,
+          out_date: newEmp.outDate,
+          photo: newEmp.photo,
         });
         // Insert to DB employees_addresses
         let latestEmployee = await employeesAddress.create({
           employee_id: dataEmployee.id,
-          street_name: streetName,
-          district: district,
-          city: city,
-          province: province,
-          country: country,
-          postal_code: postalCode,
+          street_name: newEmp.streetName,
+          district: newEmp.district,
+          city: newEmp.city,
+          province: newEmp.province,
+          country: newEmp.country,
+          postal_code: newEmp.postalCode,
         });
         let allData = await Employee.findAll({
           where: {
-            email: email,
+            email: newEmp.email,
           },
           include: {
             model: employeesAddress,
@@ -192,9 +172,11 @@ module.exports = {
           },
         });
         response(201, allData, "Register Succes!", res);
+      } else {
+        response(403, null, "Email has been register!", res);
       }
-      response(403, null, "Email has been register!", res);
     } catch (error) {
+      console.log(error);
       response(500, error, "Internal server error", res);
     }
   },
@@ -230,7 +212,7 @@ module.exports = {
               },
             }
           );
-          response(200, createToken, "Login Success!", res);
+          response(200, { token: createToken }, "Login Success!", res);
         } else {
           response(403, null, "Wrong Password!", res);
         }

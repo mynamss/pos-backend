@@ -6,7 +6,7 @@ module.exports = {
   getAllCustomer: async (req, res) => {
     try {
       let allCust = await Customer.findAll();
-      console.log("allCust");
+      console.log("allCust", allCust);
 
       if (allCust.length == 0) {
         response(404, null, "Customer Not Found", res);

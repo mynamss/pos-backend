@@ -9,16 +9,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Supplier.belongsTo(models.suppliersAddress, {
-        foreignKey: "address_id",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      });
+      Supplier.hasOne(models.suppliersAddress);
+
     }
   }
   Supplier.init(
     {
-      addresss_id: DataTypes.INTEGER,
       company_code: DataTypes.STRING,
       company_name: DataTypes.STRING,
       phone: DataTypes.STRING,

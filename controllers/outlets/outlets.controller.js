@@ -5,11 +5,19 @@ module.exports = {
   // Table Outlets
   getAllOutlet: async (req, res) => {
     try {
+      res.json({
+        "msg": "all outlet"
+      })
     } catch (error) {}
   },
   getOutletByID: async (req, res) => {
     try {
-    } catch (error) {}
+      res.json({
+        "msg": "outlet by id"
+      })
+    } catch (error) {
+      console.log(error);
+    }
   },
   addOutlet: async (req, res) => {
     try {

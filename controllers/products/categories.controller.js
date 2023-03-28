@@ -1,6 +1,6 @@
 const models = require("../../models");
 const { Categories } = models;
-const response = require("../../response");
+const {response, errResponse} = require("../../response");
 
 module.exports = {
   getAllCategory: async (req, res) => {

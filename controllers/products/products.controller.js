@@ -1,6 +1,6 @@
 const models = require("../../models");
 const { Product } = models;
-const response = require("../../response");
+const { response } = require("../../response");
 
 module.exports = {
   getAllProduct: async (req, res) => {
@@ -18,11 +18,11 @@ module.exports = {
   },
   getProductByID: async (req, res) => {
     try {
-      let { productcode } = req.query;
+      let { barcode_id } = req.query;
 
       const oneProduct = await Product.findOne({
         where: {
-          product_code: productcode,
+          barcode_id: barcode_id,
         },
       });
       if (oneProduct.length == 0) {

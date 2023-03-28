@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   Employee.init(
     {
       outlet_id: DataTypes.INTEGER,
+      role_id: DataTypes.INTEGER,
       status: DataTypes.STRING,
       employee_code: DataTypes.STRING,
       employee_name: DataTypes.STRING,

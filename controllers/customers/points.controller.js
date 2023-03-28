@@ -47,4 +47,27 @@ module.exports = {
       response(500, error, "Internal Server Error", res);
     }
   },
+
+  getAllEarnedPoints: async (req, res) => {
+    try {
+    } catch (error) {
+      response(500, error, "Internal Server Error", res);
+    }
+  },
+
+  getEarnedPointByID: async (req, res) => {
+    try {
+    } catch (error) {
+      response(500, error, "Internal Server Error", res);
+    }
+  },
+
+  addEarnedPointByID: async (req, res) => {
+    // export ke sales
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
 };

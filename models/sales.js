@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Sales.init({
+    sale_code: DataTypes.STRING,
     employee_id: DataTypes.INTEGER,
     cust_id: DataTypes.INTEGER,
     total_product: DataTypes.FLOAT,

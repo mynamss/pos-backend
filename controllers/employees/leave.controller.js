@@ -1,6 +1,6 @@
 const models = require("../../models");
 const { Leave, Employee } = models;
-const response = require("../../response");
+const { response, errResponse } = require("../../response");
 
 module.exports = {
   // Table Leave
@@ -22,19 +22,27 @@ module.exports = {
       const employee = await Employee.findOne({
         where: {
           token: req.headers.authorization.split(" ")[1],
+          // id: 1
         },
       });
-      const someLeave = await Leave.findAll({
-        where: {
-          employee_id: employee.id,
-        },
-      });
-      if (someLeave === null) {
-        response(404, null, "Leave not found", res);
+      if (employee == null) {
+        errResponse(400, null, "Unauthorized", res);
+      } else {
+        const someLeave = await Leave.findAll({
+          where: {
+            employee_id: employee.id,
+          },
+          // order: [['start_time', 'DESC']]
+        });
+        // checking
+        if (someLeave.length == 0) {
+          errResponse(404, null, "Leave not found", res);
+        } else {
+          response(200, someLeave, "Get leave successfully", res);
+        }
       }
-      response(200, someLeave, "Get 1 Leave Success", res);
     } catch (error) {
-      response(500, null, "Internal server error", res);
+      errResponse(500, null, "Internal server error", res);
     }
   },
   addLeave: async (req, res) => {
