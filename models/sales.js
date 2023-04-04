@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: "CASCADE",
       })
       Sales.belongsTo(models.Customer, {
-        foreignKey: "cust_id",
+        foreignKey: "customer_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       })

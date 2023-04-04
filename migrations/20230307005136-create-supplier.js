@@ -9,16 +9,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      addresss_id: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: "suppliers_address",
-          key: "id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      },
       company_code: {
         type: Sequelize.STRING,
       },
@@ -29,9 +19,6 @@ module.exports = {
         type: Sequelize.STRING,
       },
       email: {
-        type: Sequelize.STRING,
-      },
-      faxmail: {
         type: Sequelize.STRING,
       },
       company_logo: {

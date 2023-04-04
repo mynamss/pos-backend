@@ -2,23 +2,6 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn(
-      "employees",
-      "role_id",
-      {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "roles",
-          key: "id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      },
-      {
-        after: "outlet_id",
-      }
-    );
     await queryInterface.createTable("employees", {
       id: {
         allowNull: false,
@@ -40,7 +23,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "outlets",
+          model: "roles",
           key: "id",
         },
         onDelete: "CASCADE",
@@ -52,16 +35,10 @@ module.exports = {
       employee_code: {
         type: Sequelize.STRING,
       },
-      employee_name: {
+      fullname: {
         type: Sequelize.STRING,
       },
-      first_name: {
-        type: Sequelize.STRING,
-      },
-      last_name: {
-        type: Sequelize.STRING,
-      },
-      ID_card: {
+      id_card: {
         type: Sequelize.STRING,
       },
       gender: {

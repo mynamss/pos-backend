@@ -17,7 +17,11 @@ const salesRouter = require("./sales.router");
 
 // homepage
 router.get("/", (req, res) => {
-  res.send("Welcome, This is Point Of Sales!");
+  res.render("index", {
+    title: "Point Of Sales",
+    message: "Welcome to Magic POS",
+  });
+  // res.send("Welcome, This is Point Of Sales!");
 });
 // router.get('/key', (req, res) => {
 //   res.send(key.generate(32));
@@ -31,7 +35,7 @@ router.use("/employees", employeesRouter);
 router.use("/outlets", outletsRouter);
 router.use("/suppliers", suppliersRouter);
 
-router.use("/roles", rolesRouter);  // done RN
+router.use("/roles", rolesRouter); // done RN
 router.use("/leave", leaveRouter);
 router.use("/shifts", shiftsRouter);
 router.use("/categories", categoriesRouter);

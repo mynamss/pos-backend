@@ -5,7 +5,7 @@ require("dotenv").config();
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { generateToken } = require("../middlewares");
-const { response } = require("../response");
+const { response, errResponse } = require("../response");
 
 module.exports = {
   // Customers
@@ -24,7 +24,7 @@ module.exports = {
         // Hash pwd -> Hash PIN -> create to DB -> create point
         const salt = await bcrypt.genSalt(saltRounds);
         const hashedPwd = await bcrypt.hash(cust.password, salt);
-        // const hashedPIN = await bcrypt.hash(cust.pin_number, salt);
+        // const hashedPIN = await bcrypt.hash(cust.pin_"number", salt);
 
         // Insert to DB Customer
         let newCust = await Customer.create({
@@ -110,22 +110,17 @@ module.exports = {
   // Employees
   registerEmployee: async (req, res) => {
     try {
-      // Info, belum ngambil data dari model outlet dan role
-      // PERBAIKI VALIDASI SETIAP DATA
       const newEmp = req.body;
-      //   data checking
+
+      // data checking
       let isEmailExist = await Employee.findOne({
         where: {
           email: newEmp.email,
         },
       });
-      // checking
+
+      // // checking
       if (isEmailExist == null) {
-        // const outlet = await Outlet.findOne({
-        //   where: {
-        //     outlet_code: newEmp.outletCode,
-        //   },
-        // });
         const salt = await bcrypt.genSalt(saltRounds);
         const hashPwd = await bcrypt.hash(newEmp.password, salt);
         // insert to DB employees
@@ -171,7 +166,7 @@ module.exports = {
             },
           },
         });
-        response(201, allData, "Register Succes!", res);
+        response(201, newEmp, "Register Succes!", res);
       } else {
         response(403, null, "Email has been register!", res);
       }

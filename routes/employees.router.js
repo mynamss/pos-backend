@@ -1,13 +1,25 @@
 const express = require("express");
 const router = express();
-const middleWare = require("../middlewares");
 const auth = require("../controllers/auth.controller");
+
+// middlewares
+const {validateRegister, validateLogin, runValidation} = require('../middlewares/validateType/validateEmployee');
 
 const employees = require("../controllers/employees/employees.controller");
 const address = require("../controllers/address.controller");
 
-// auth
-router.post("/register", auth.registerEmployee);
+
+// auth:
+// register employee
+router.get("/register", (req, res) => {
+  res.render("./pages/auth/register-employee.ejs");
+});
+router.post("/register", [validateRegister, runValidation],auth.registerEmployee);
+
+// login employee
+router.get("/login", (req, res) => {
+  res.render("./pages/auth/login-employee.ejs");
+});
 router.post("/login", auth.loginEmployee);
 
 // employees data

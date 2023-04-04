@@ -14,7 +14,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // ejs templating
+app.use(express.static(__dirname + '/views'));
 app.set("view engine", "ejs");
+
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);

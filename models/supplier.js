@@ -10,7 +10,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Supplier.hasOne(models.suppliersAddress);
-
+      Supplier.hasMany(models.productsPurchase);
+      Supplier.belongsToMany(models.Outlet, {
+        through: "suppliersOutlet",
+        foreignKey: "supplier_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      });
     }
   }
   Supplier.init(
@@ -19,7 +25,6 @@ module.exports = (sequelize, DataTypes) => {
       company_name: DataTypes.STRING,
       phone: DataTypes.STRING,
       email: DataTypes.STRING,
-      faxmail: DataTypes.STRING,
       company_logo: DataTypes.STRING,
       motto: DataTypes.STRING,
       desc: DataTypes.STRING,

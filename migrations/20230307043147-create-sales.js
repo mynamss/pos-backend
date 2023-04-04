@@ -19,7 +19,7 @@ module.exports = {
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
-      cust_id: {
+      customer_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {

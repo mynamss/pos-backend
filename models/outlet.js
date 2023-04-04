@@ -42,7 +42,6 @@ module.exports = (sequelize, DataTypes) => {
       slogan: DataTypes.STRING,
       email: DataTypes.STRING,
       phone: DataTypes.STRING,
-      faxmail: DataTypes.STRING,
       owner_name: DataTypes.STRING,
       created_by: DataTypes.INTEGER,
       updated_by: DataTypes.INTEGER,

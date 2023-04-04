@@ -27,9 +27,6 @@ module.exports = {
       phone: {
         type: Sequelize.STRING,
       },
-      faxmail: {
-        type: Sequelize.STRING,
-      },
       owner_name: {
         type: Sequelize.STRING,
       },

@@ -1,6 +1,6 @@
 const models = require("../../models");
 const { Employee } = models;
-const {response, errResponse} = require('../../response');
+const { response, errResponse } = require("../../response");
 
 module.exports = {
   // Table Employees
@@ -20,8 +20,8 @@ module.exports = {
   getEmployeeByID: async (req, res) => {
     try {
       res.json({
-        "msg": "employee by id"
-    })
+        msg: "employee by id",
+      });
     } catch (error) {}
   },
   addEmployee: async (req, res) => {
