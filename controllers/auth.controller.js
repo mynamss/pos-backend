@@ -1,11 +1,13 @@
 const models = require("../models");
-const { Employee, employeesAddress, Customer, Point, Outlet } = models;
+const { Op } = require("sequelize");
+const { Employee, employeesAddress, Customer, Point, Outlet, Role } = models;
+const { addEmpAddr } = require("../controllers/address.controller");
 require("dotenv").config();
 
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { generateToken } = require("../middlewares");
-const { response, errResponse } = require("../response");
+const { response } = require("../response");
 
 module.exports = {
   // Customers
@@ -118,104 +120,162 @@ module.exports = {
           email: newEmp.email,
         },
       });
+      let isNameExist = await Employee.findOne({
+        where: {
+          fullname: newEmp.fullname,
+        },
+      });
+      let isIDCardsExist = await Employee.findOne({
+        where: {
+          id_card: newEmp.id_card,
+        },
+      });
+      let isPhoneExist = await Employee.findOne({
+        where: {
+          phone: newEmp.phone,
+        },
+      });
 
-      // // checking
-      if (isEmailExist == null) {
+      // checking
+      if (isEmailExist) {
+        console.log("Email sudah terdaftar");
+        throw {
+          success: false,
+          code: 409,
+          message: "Email is already registered!",
+          data: null,
+          details: `${newEmp.email} has been registered!`,
+        };
+      } else if (isNameExist) {
+        console.log("Nama sudah terdaftar");
+        throw {
+          success: false,
+          code: 409,
+          message: "Name is already registered!",
+          data: null,
+          details: `${newEmp.fullname} has been registered!`,
+        };
+      } else if (isIDCardsExist) {
+        console.log("ID sudah terdaftar");
+        throw {
+          success: false,
+          code: 409,
+          message: "ID Cards is already registered!",
+          data: null,
+          details: `${newEmp.id_card} has been registered!`,
+        };
+      } else if (isPhoneExist) {
+        console.log("Phone sudah terdaftar");
+        throw {
+          success: false,
+          code: 409,
+          message: "Phone is already registered!",
+          data: null,
+          details: `${newEmp.phone} has been registered!`,
+        };
+      } else {
         const salt = await bcrypt.genSalt(saltRounds);
         const hashPwd = await bcrypt.hash(newEmp.password, salt);
+
         // insert to DB employees
-        let dataEmployee = await Employee.create({
-          outlet_id: newEmp.outletID,
-          role_id: newEmp.roleID,
+        const employee = await Employee.create({
+          outlet_id: newEmp.outlet_id,
+          role_id: newEmp.role_id,
           status: newEmp.status,
-          employee_code: newEmp.employeeCode,
-          employee_name: newEmp.employeeName,
-          first_name: newEmp.firstName,
-          last_name: newEmp.lastName,
-          id_card: newEmp.IDCard,
+          employee_code: newEmp.employee_code,
+          fullname: newEmp.fullname,
+          id_card: newEmp.id_card,
           gender: newEmp.gender,
           birthdate: new Date(newEmp.birthdate),
-          married_status: newEmp.marriedStatus,
+          married_status: newEmp.married_status,
           phone: newEmp.phone,
-          email: newEmp.email,
+          email: newEmp.email.toLowerCase(),
           password: hashPwd,
-          main_salary: newEmp.mainSalary,
-          bonus_salary: newEmp.bonusSalary,
-          entry_date: newEmp.entryDate,
-          out_date: newEmp.outDate,
+          main_salary: newEmp.main_salary,
+          bonus_salary: newEmp.bonus_salary,
+          entry_date: new Date(newEmp.entry_date),
+          out_date: new Date(newEmp.out_date),
           photo: newEmp.photo,
         });
-        // Insert to DB employees_addresses
-        let latestEmployee = await employeesAddress.create({
-          employee_id: dataEmployee.id,
-          street_name: newEmp.streetName,
-          district: newEmp.district,
-          city: newEmp.city,
-          province: newEmp.province,
-          country: newEmp.country,
-          postal_code: newEmp.postalCode,
-        });
-        let allData = await Employee.findAll({
-          where: {
-            email: newEmp.email,
+        // add author
+        await Employee.update(
+          {
+            created_by: employee.id, 
+            updated_by: employee.id 
           },
-          include: {
-            model: employeesAddress,
+          {
             where: {
-              employee_id: latestEmployee.employee_id,
+              email: employee.email,
             },
-          },
-        });
-        response(201, newEmp, "Register Succes!", res);
-      } else {
-        response(403, null, "Email has been register!", res);
+          }
+        )
+        // insert to employees_addresses
+        await addEmpAddr(newEmp, employee)
+        
+        return response(true, 201, "Register success!", "", "", res);
       }
     } catch (error) {
-      console.log(error);
-      response(500, error, "Internal server error", res);
+      response(error.success, error.code, error.message, error.data, error.details, res);
     }
   },
 
   loginEmployee: async (req, res) => {
     try {
-      let { email, password } = req.body;
-      // Cek email dan pwd
-      let isUserExist = await Employee.findOne({
+      const { fullname, email, password } = req.body;
+      // checking email and password
+      const isUserExist = await Employee.findOne({
         where: {
-          email: email,
+          [Op.or]: [{ email: email || "" }, { fullname: fullname || "" }],
         },
+        include: [Role],
       });
-      if (isUserExist) {
-        // Compare Pwd
-        let compare = await bcrypt.compare(password, isUserExist.password);
-        if (compare) {
-          const tokenEmployee = {
-            id: isUserExist.employee_id,
-            email: isUserExist.email,
-            as: "Employee",
-          };
-          // Generate token
-          const createToken = generateToken(tokenEmployee);
-          // Save token to DB Employee
-          await Employee.update(
-            {
-              token: createToken,
-            },
-            {
-              where: {
-                email: isUserExist.email,
-              },
-            }
-          );
-          response(200, { token: createToken }, "Login Success!", res);
-        } else {
-          response(403, null, "Wrong Password!", res);
-        }
-      } else {
-        response(404, null, "Wrong Email", res);
+      // if not found
+      if (!isUserExist) {
+        throw {
+          success: false,
+          code: 404,
+          data: null,
+          message: "User not found!",
+          details: `Username or email entered is not found!`,
+        };
       }
+
+      // compare pass
+      let compare = await bcrypt.compare(password, isUserExist.password);
+      // if not match
+      if (!compare) {
+        throw {
+          success: false,
+          code: 409,
+          data: null,
+          message: "Wrong Password!",
+          details: `The password entered is incorrect!`,
+        };
+      }
+
+      const tokenEmployee = {
+        code: isUserExist.employee_code,
+        email: isUserExist.email,
+        as: isUserExist.Role.role_name,
+      };
+      // Generate token
+      const createToken = generateToken(tokenEmployee);
+      // Save token to DB Employee
+      await Employee.update(
+        {
+          token: createToken,
+        },
+        {
+          where: {
+            email: isUserExist.email,
+          },
+        }
+      );
+      // response = (success, code, message, data, details, res)
+      return response(true, 201, "Login Success!", { token: createToken }, "", res);
     } catch (error) {
-      response(500, error, "Internal server error", res);
+      console.log(error);
+      response(error.success, error.code, error.message, error.data, error.details, res);
     }
   },
 };

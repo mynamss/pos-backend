@@ -3,55 +3,53 @@ const router = express();
 const auth = require("../controllers/auth.controller");
 
 // middlewares
-const {validateRegister, validateLogin, runValidation} = require('../middlewares/validateType/validateEmployee');
+const { validateRegister, validateLogin, runValidation, validateUpdate } = require("../middlewares/validateType/validateEmployee");
+const { verifyToken } = require("../middlewares");
 
 const employees = require("../controllers/employees/employees.controller");
 const address = require("../controllers/address.controller");
-
 
 // auth:
 // register employee
 router.get("/register", (req, res) => {
   res.render("./pages/auth/register-employee.ejs");
 });
-router.post("/register", [validateRegister, runValidation],auth.registerEmployee);
+router.post("/register", [validateRegister, runValidation], auth.registerEmployee);
 
 // login employee
 router.get("/login", (req, res) => {
   res.render("./pages/auth/login-employee.ejs");
 });
-router.post("/login", auth.loginEmployee);
+router.post("/login", [validateLogin, runValidation], auth.loginEmployee);
 
 // employees data
 router
   .route("/")
-  // get all employee
-  .get(employees.getAllEmployee)
-  // add new employee
-  .post(employees.addEmployee);
+  // get all employee = hanya manager
+  .get(verifyToken, employees.getAllEmployee);
 
 router
-  .route("/with/:id")
+  .route("/profile/:id")
   // get employee by id
-  .get(employees.getEmployeeByID)
+  .get(verifyToken, employees.getEmployeeByID)
   // update existing employee
-  .put(employees.updateEmployee)
+  .put(verifyToken, [validateUpdate, runValidation], employees.updateEmployee)
   // delete existing employee
-  .delete(employees.deleteEmployee);
+  .delete(verifyToken, employees.deleteEmployee);
 
 // employees address
 router
   .route("/address")
   // get all supp address
-  .get(address.getAllEmpAddr);
+  .get(verifyToken, address.getAllEmpAddr);
 
-router
-  .route("/address/:id")
+// router
+  // .route("/address/:id")
   // get address by id
-  .get(address.getEmpAddrByID)
+  // .get(verifyToken, address.getEmpAddrByID)
   // update existing address
-  .put(address.updateEmpAddr)
+  // .put(verifyToken, [validateUpdate, runValidation], address.updateEmpAddr)
   // delete existing address
-  .delete(address.deleteEmpAddr);
+  // .delete(verifyToken,address.deleteEmpAddr);
 
 module.exports = router;

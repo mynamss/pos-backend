@@ -1,33 +1,21 @@
-let response = (statusCode, data, message, res) => {
-  res.status(statusCode).json({
-    payload: {
-      statusCode: statusCode,
-      message: message,
-      data: data,
-    },
-    // pagination: {
-    //   prev: "",
-    //   next: "",
-    //   max: "",
-    //   current: "",
-    // },
+// response(error.success, error.code, error.message, error.data,  error.details, res);
+let response = (success, code, message, data, details, res) => {
+  if (success == false) {
+    return res.status(code).json({
+      success: success,
+      code: code,
+      error: {
+        message: message,
+        details: details,
+      },
+    });
+  }
+  return res.status(code).json({
+    success: success,
+    code: code,
+    message: message,
+    data: data,
   });
 };
 
-let errResponse = (statusCode, error, message, res) => {
-  res.status(statusCode).json({
-    payload: {
-      statusCode: statusCode,
-      message: message,
-      error: error,
-    },
-    // pagination: {
-    //   prev: "",
-    //   next: "",
-    //   max: "",
-    //   current: "",
-    // },
-  });
-};
-
-module.exports = {response, errResponse};
+module.exports = { response };

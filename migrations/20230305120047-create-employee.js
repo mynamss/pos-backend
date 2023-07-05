@@ -48,7 +48,7 @@ module.exports = {
         type: Sequelize.DATEONLY,
       },
       married_status: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.STRING,
       },
       phone: {
         type: Sequelize.STRING,
