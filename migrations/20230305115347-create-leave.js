@@ -5,7 +5,7 @@ const employee = require("../models/employee");
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("leave", {
+    await queryInterface.createTable("leaves", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -21,6 +21,9 @@ module.exports = {
         },
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
+      },
+      leave_code: {
+        type: Sequelize.STRING,
       },
       start_time: {
         type: Sequelize.DATE,
@@ -45,6 +48,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("leave");
+    await queryInterface.dropTable("leaves");
   },
 };

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express();
 
-const { getAllShift, addShift, updateShift, deleteShift, getShiftByID } = require("../controllers/employees/shiftsController");
+const { getAllShift, addShift, updateShift, deleteShift, getShiftByID } = require("../controllers/employees/shifts.controller");
 
 router.get("/", getAllShift);
 router.get("/:id", getShiftByID);

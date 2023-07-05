@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   customersOutlet.init(
     {
       outlet_id: DataTypes.INTEGER,
-      cust_id: DataTypes.INTEGER,
+      customer_id: DataTypes.INTEGER,
       cust_today: DataTypes.INTEGER,
       created_by: DataTypes.INTEGER,
       updated_by: DataTypes.INTEGER,

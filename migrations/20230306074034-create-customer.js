@@ -23,13 +23,10 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING,
       },
-      member_name: {
+      username: {
         type: Sequelize.STRING,
       },
-      first_name: {
-        type: Sequelize.STRING,
-      },
-      last_name: {
+      fullname: {
         type: Sequelize.STRING,
       },
       gender: {
@@ -46,8 +43,11 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
       },
-      PIN_number: {
+      pin_number: {
         type: Sequelize.INTEGER,
+      },
+      token: {
+        type: Sequelize.STRING,
       },
       created_at: {
         allowNull: false,

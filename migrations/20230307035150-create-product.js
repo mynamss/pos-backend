@@ -43,13 +43,13 @@ module.exports = {
       desc: {
         type: Sequelize.STRING,
       },
-      image: {
+      image_link: {
         type: Sequelize.STRING,
       },
       exp_date: {
         type: Sequelize.DATEONLY,
       },
-      BPOM_number: {
+      bpom_number: {
         type: Sequelize.STRING,
       },
       created_at: {

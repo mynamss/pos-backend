@@ -9,8 +9,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Supplier.belongsTo(models.suppliersAddress, {
-        foreignKey: "address_id",
+      Supplier.hasOne(models.suppliersAddress);
+      Supplier.hasMany(models.productsPurchase);
+      Supplier.belongsToMany(models.Outlet, {
+        through: "suppliersOutlet",
+        foreignKey: "supplier_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
@@ -18,12 +21,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   Supplier.init(
     {
-      addresss_id: DataTypes.INTEGER,
       company_code: DataTypes.STRING,
       company_name: DataTypes.STRING,
       phone: DataTypes.STRING,
       email: DataTypes.STRING,
-      faxmail: DataTypes.STRING,
       company_logo: DataTypes.STRING,
       motto: DataTypes.STRING,
       desc: DataTypes.STRING,

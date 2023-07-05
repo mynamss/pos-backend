@@ -8,11 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Customer.belongsTo(models.Point, {
-        foreignKey: "point_id",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      });
+      Customer.hasOne(models.Point)
       Customer.belongsToMany(models.Outlet, {
         through: "customersOutlet",
         foreignKey: "cust_id",
@@ -25,14 +21,14 @@ module.exports = (sequelize, DataTypes) => {
     {
       point_id: DataTypes.INTEGER,
       cust_code: DataTypes.STRING,
-      member_name: DataTypes.STRING,
-      first_name: DataTypes.STRING,
-      last_name: DataTypes.STRING,
+      username: DataTypes.STRING,
+      fullname: DataTypes.STRING,
       gender: DataTypes.STRING,
       phone: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      PIN_number: DataTypes.INTEGER,
+      pin_number: DataTypes.INTEGER,
+      token: DataTypes.STRING,
       created_by: DataTypes.INTEGER,
       updated_by: DataTypes.INTEGER,
     },

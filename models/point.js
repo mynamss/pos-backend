@@ -9,13 +9,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // 1:1
-      Point.hasOne(models.Customer);
+      Point.belongsTo(models.Customer, {
+        foreignKey: "customer_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      });
       // 1:M
       Point.hasMany(models.earnedPoint);
     }
   }
   Point.init(
     {
+      customer_id: DataTypes.INTEGER,
       total_point: DataTypes.FLOAT,
       level_name: DataTypes.STRING,
       created_by: DataTypes.INTEGER,
@@ -24,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Point",
-      underscored: true
+      underscored: true,
     }
   );
   return Point;

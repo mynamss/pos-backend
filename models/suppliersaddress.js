@@ -8,11 +8,16 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      suppliersAddress.hasOne(models.Supplier);
+      suppliersAddress.belongsTo(models.Supplier, {
+        foreignKey: "supplier_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      });
     }
   }
   suppliersAddress.init(
     {
+      supplier_id: DataTypes.INTEGER,
       street_name: DataTypes.STRING,
       district: DataTypes.STRING,
       city: DataTypes.STRING,
